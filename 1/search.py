@@ -1,5 +1,21 @@
 #search
 
+'''
+Output:
+
+Output for search(2)
+Pushes: 5.24
+Pops: 5.84
+Depth: 1.77
+
+Output for search(3)
+Pushes: 1033.24
+Pops: 1030.8
+Depth: 6.12
+
+search(4) took too long to print anything
+'''
+
 import state
 import frontier
 
