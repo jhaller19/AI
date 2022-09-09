@@ -7,6 +7,7 @@ The target for 8-puzzle is: (zero is the hole)
 '''
 import random
 import math
+from tkinter import N
 
 #returns a random board nXn
 def create(n):
@@ -58,7 +59,21 @@ def hdistance(s): #This is uniform cost and not based on any heuristic
     return 0
 
 def hdistance1(s): #This will be the simple heuristic of the number of bricks not in place
-    return 0
+    c = 0
+    for i in range(len(s[0])):
+        if(i != s[0][i]):
+            c+=1
+    return c
 
 def hdistance2(s): #This will be the Manhattan distance heuristic
-    return 0
+    print(s)
+    c = 0
+    n = math.sqrt(len(s[0]))
+    for i in range(len(s[0])):
+        x1 = i//n
+        y1 = i%n
+        x2 = s[0][i]//n
+        y2 = s[0][i]%n
+        dif = abs(x2-x1) + abs(y2-y1)
+        c+=dif
+    return c
