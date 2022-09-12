@@ -4,14 +4,14 @@
 Output:
 
 Output for search(2)
-Pushes: 5.24
-Pops: 5.84
-Depth: 1.77
+Pushes: 5.96
+Pops: 5.58
+Depth: 1.63
 
 Output for search(3)
-Pushes: 1033.24
-Pops: 1030.8
-Depth: 6.12
+Pushes: 1055.54
+Pops: 606.99
+Depth: 5.69
 
 search(4) took too long to print anything
 '''
