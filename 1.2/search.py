@@ -27,8 +27,9 @@ Output for search(4)
 Pushes: 2908.6
 Pops: 1454.4
 Cost path: 17.2
-
-
+***************************
+Analysis: When compared with the unweighted version, the weighted version did much better for 
+hdistance1 and did slightly worse for hdistance2
 
 
 '''
