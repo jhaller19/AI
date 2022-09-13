@@ -8,14 +8,15 @@ the right side of index i is in index 2i+2
 import state
 
 #implements a priority queue
-#[list of states, total num of states]
+#[list of states, total num of states, pushed, popped]
 
 def create(s):
-    return [[s], 0]
+    return [[s], 0, 0, 0]
 
 def is_empty(f):
     return f==[]    # returns true iff f is empty list
 def insert(h, s):
+    h[2]+=1         ### inc push
     #inserts state s to the frontier
     f=h[0]
     h[1]+=1
@@ -30,6 +31,7 @@ def insert(h, s):
         i=(i-1)//2  # i moves upwards
 
 def remove(h):
+    h[3]+=1         ### inc pop
     if is_empty(h):
         return 0
     f=h[0]
@@ -40,7 +42,7 @@ def remove(h):
     return s
 
 def val(s):  # returns f(x) which is path len + heuristic distance from target
-    return state.hdistance2(s)+state.path_len(s)
+    return 2*state.hdistance2(s)+state.path_len(s)
 '''
 for greedy best first search val returns hdistance
 for uniform cost val returns path len
