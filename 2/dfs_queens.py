@@ -15,7 +15,7 @@ from shutil import move
 
 columns = [] #columns is the locations for each of the queens
 # columns[r] is a number c if a queen is placed at row r and column c.
-size = 4
+size = 8
 import random #hint -- you will need this for the following code: column=random.randrange(0,size)
 
 """Let's setup one iteration of the British Museum algorithm-- we'll put down 4 queens randomly."""
@@ -139,7 +139,7 @@ def next_row_is_safe(column):
 #size = int(input('Enter n: '))
 num_iterations=0
 number_moves = 0
-
+print("***************DFS*****************")
 num_iterations, number_moves=solve_queen(size)
 
 ######################################British Museum###########################################
@@ -215,8 +215,6 @@ def displayBoard(columns):
         print()
     print(columns)
 
-
-
 place_n_queens(size)
 def hillClimbing(columns):
     moves = len(columns)
@@ -241,7 +239,7 @@ def hillClimbing(columns):
                         min = h
                         curMinArray = copyOfColumns.copy()
         if(prevH == min):
-            #print("restart " + str(min))
+            print("restart " + str(min))
             rePlaceQueens(columns,size)
             moves += len(columns)
             prevH = countAttacks(columns)
@@ -258,7 +256,7 @@ displayBoard(winner)
 def next_row_is_safe_FC(column, temp):
     row = len(columns) 
     # check column
-    if temp[row][column] == 1:
+    if temp[row][column] != 0:
         return False
     for queen_column in columns:
         if column == queen_column:
@@ -267,14 +265,17 @@ def next_row_is_safe_FC(column, temp):
 
 def place_in_next_row_FC(column,row,temp,columns):
     columns.append(column)
+    size = len(columns)
     for i in range(len(temp)):
-        temp[i][column] = 1
+        if(temp[i][column] == 0):
+            temp[i][column] = size
     r = row
     c = column
     while True:
         if(r > len(temp) - 1 or c > len(temp) - 1):
             break
-        temp[r][c] = 1
+        if(temp[r][c] == 0):
+            temp[r][c] = size
         r+=1
         c+=1
     r = row
@@ -282,7 +283,8 @@ def place_in_next_row_FC(column,row,temp,columns):
     while True:
         if(r < 0 or c < 0):
             break
-        temp[r][c] = 1
+        if(temp[r][c] == 0):
+            temp[r][c] = size
         r-=1
         c-=1
     r = row
@@ -290,7 +292,8 @@ def place_in_next_row_FC(column,row,temp,columns):
     while True:
         if(r > len(temp) - 1 or c < 0):
             break
-        temp[r][c] = 1
+        if(temp[r][c] == 0):
+            temp[r][c] = size
         r+=1
         c-=1
     r = row
@@ -298,20 +301,23 @@ def place_in_next_row_FC(column,row,temp,columns):
     while True:
         if(c > len(temp) - 1 or r < 0):
             break
-        temp[r][c] = 1
+        if(temp[r][c] == 0):
+            temp[r][c] = size
         c+=1
         r-=1
     
 def remove_in_current_row_FC(column,row,temp,columns):
     if len(columns) > 0:
         for i in range(len(temp)):
-            temp[i][column] = 0
+            if(temp[i][column] == len(columns)):
+                temp[i][column] = 0
         r = row
         c = column
         while True:
             if(r > len(temp) - 1 or c > len(temp) - 1):
                 break
-            temp[r][c] = 0
+            if(temp[r][c] == len(columns)):
+                temp[r][c] = 0
             r+=1
             c+=1
         r = row
@@ -319,7 +325,8 @@ def remove_in_current_row_FC(column,row,temp,columns):
         while True:
             if(r < 0 or c < 0):
                 break
-            temp[r][c] = 0
+            if(temp[r][c] == len(columns)):
+                temp[r][c] = 0
             r-=1
             c-=1
         r = row
@@ -327,7 +334,8 @@ def remove_in_current_row_FC(column,row,temp,columns):
         while True:
             if(r > len(temp) - 1 or c < 0):
                 break
-            temp[r][c] = 0
+            if(temp[r][c] == len(columns)):
+                temp[r][c] = 0
             r+=1
             c-=1
         r = row
@@ -335,7 +343,8 @@ def remove_in_current_row_FC(column,row,temp,columns):
         while True:
             if(c > len(temp) - 1 or r < 0):
                 break
-            temp[r][c] = 0
+            if(temp[r][c] == len(columns)):
+                temp[r][c] = 0
             c+=1
             r-=1
         return columns.pop()
@@ -344,21 +353,16 @@ def remove_in_current_row_FC(column,row,temp,columns):
 def forwardChecking(columns):
     temp = [ [ 0 for i in range(size) ] for j in range(size) ]
     columns.clear()
-    number_of_moves = 0 #where do I change this so it counts the number of Queen moves?
+    number_of_moves = 0
     number_of_iterations = 0  
     row = 0
     column = 0
     # iterate over rows of board
     while True:
-        #place queen in next row
-        ''''print(columns)
-        print("I have ", row, " number of queens put down")
-        display()
-        print(number_of_moves)'''
         while column < size:
             number_of_iterations+=1
-            number_of_moves += 1
             if next_row_is_safe_FC(column,temp):
+                number_of_moves += 1
                 place_in_next_row_FC(column,row,temp,columns)
                 row += 1
                 column = 0
@@ -385,4 +389,5 @@ def forwardChecking(columns):
             row -= 1
             # start checking at column = (1 + value of column in previous row)
             column = 1 + prev_column
-forwardChecking(columns)
+print("*********FC***********")
+#forwardChecking(columns)
