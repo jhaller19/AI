@@ -222,8 +222,11 @@ def hillClimbing(columns):
     prevH = countAttacks(columns)
     min = prevH
     iterations = 0
+    curIterations = 0
+    maxIterations = 300
     while True:
         iterations+=1
+        curIterations+=1
         copyOfColumns = columns.copy()
         curMinArray = columns.copy()
         for i in range(len(columns)):
@@ -233,14 +236,15 @@ def hillClimbing(columns):
                     h = countAttacks(copyOfColumns)
                     if(h == 0):
                         columns = copyOfColumns
-                        print(str(iterations) + ", " + str(moves))
-                        return copyOfColumns
+                        displayBoard(copyOfColumns)
+                        return iterations,moves
                     if(h <= min):
                         min = h
                         curMinArray = copyOfColumns.copy()
-        if(prevH == min):
-            print("restart " + str(min))
+        if(prevH == min or curIterations >= maxIterations):
+            #print("restart " + str(min))
             rePlaceQueens(columns,size)
+            curIterations = 0
             moves += len(columns)
             prevH = countAttacks(columns)
             min = prevH
@@ -249,8 +253,13 @@ def hillClimbing(columns):
         prevH = min
         columns = curMinArray
 print("********Hill Climbing*************")
-winner = hillClimbing(columns)
-displayBoard(winner)
+HC_Iterations = 0
+HC_Moves = 0
+for i in range(100):
+    Cur_Iterations, Cur_Moves = hillClimbing(columns)
+    HC_Iterations += Cur_Iterations
+    HC_Moves += Cur_Moves
+print(str(HC_Iterations/100) + ',' + str(HC_Moves/100))
 
 ######################################Forward Checking############################################3
 def next_row_is_safe_FC(column, temp):
