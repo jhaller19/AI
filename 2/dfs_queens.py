@@ -106,9 +106,11 @@ def solve_queen(size):
             number_of_moves +=1
             # if board is full, we have a solution
             if row == size:
+                '''
                 print("I did it! Here is my solution")
                 display()
                 print(str(number_of_iterations) + ", " + str(number_of_moves))
+                '''
                 return number_of_iterations, number_of_moves
             # I couldn't find a solution so I now backtrack
             prev_column = remove_in_current_row()
@@ -155,7 +157,6 @@ def next_row_is_safe(column):
             return False
     return True
 
-#size = int(input('Enter n: '))
 num_iterations=0
 number_moves = 0
 print("***************DFS*****************")
@@ -181,6 +182,7 @@ def britishMuseum(columns):
     while(not valid):
         iterations+=1
         moves+=size
+        #Randomly place queens then check if its a solution
         place_n_queens(size)
         valid = checkValid(columns)
     return iterations, moves
@@ -226,11 +228,13 @@ def countAttacks(columns):
         row+=1
     return c/2
 ##############Hill Climbing###########
+#checks if arrays are equal
 def arEqual(ar1,ar2):
     for i in range(len(ar1)):
         if(ar1[i] != ar2[i]):
             return False
     return True
+#Used for random restart
 def rePlaceQueens(columns,size):
     columns.clear()
     row = 0
@@ -247,8 +251,8 @@ def displayBoard(columns):
                 print(' .', end=' ')
         print()
     print(columns)
-
 place_n_queens(size)
+
 def hillClimbing(columns):
     moves = len(columns)
     rePlaceQueens(columns,len(columns))
@@ -262,20 +266,23 @@ def hillClimbing(columns):
         curIterations+=1
         copyOfColumns = columns.copy()
         curMinArray = columns.copy()
+        #Look at all possible states 1 move away from the current state
         for i in range(len(columns)):
             for j in range(len(columns)):
                 temp = copyOfColumns[i]
                 copyOfColumns[i] = j
                 if(not arEqual(copyOfColumns,columns)):
+                    #Calculate the h-value of the state
                     h = countAttacks(copyOfColumns)
-                    if(h == 0):
+                    if(h == 0):                     #Solution found
                         columns = copyOfColumns
                         #displayBoard(copyOfColumns)
                         return iterations,moves
                     if(h <= min):
                         min = h
                         curMinArray = copyOfColumns.copy()
-                copyOfColumns[i] = temp            
+                copyOfColumns[i] = temp 
+        #Do a random restart if we go above maxIterations or the previous h-value is the same as the current one           
         if(prevH == min or curIterations >= maxIterations):
             rePlaceQueens(columns,size)
             curIterations = 0
@@ -322,6 +329,7 @@ def next_row_is_safe_FC(column, temp):
 def place_in_next_row_FC(column,row,temp,columns):
     columns.append(column)
     size = len(columns)
+    #Mark off the invalid spots after this placements
     for i in range(len(temp)):
         if(temp[i][column] == 0):
             temp[i][column] = size
@@ -363,6 +371,7 @@ def place_in_next_row_FC(column,row,temp,columns):
         r-=1
     
 def remove_in_current_row_FC(column,row,temp,columns):
+    #Revalidate the marked spots after removal of a queen
     if len(columns) > 0:
         for i in range(len(temp)):
             if(temp[i][column] == len(columns)):
@@ -406,8 +415,13 @@ def remove_in_current_row_FC(column,row,temp,columns):
         return columns.pop()
     return -1    
 
+'''
+This method is the same as the DFS one above but with the additional feature of
+marking all invalid spots on the board in the place_in_next_row() method
+and unmarks the invalid spots in the remove_in_current_row() method
+'''
 def forwardChecking(columns):
-    temp = [ [ 0 for i in range(size) ] for j in range(size) ]
+    temp = [ [ 0 for i in range(size) ] for j in range(size) ] # copy of board to mark off invalid spots after placement
     columns.clear()
     number_of_moves = 0
     number_of_iterations = 0  
@@ -446,4 +460,4 @@ def forwardChecking(columns):
             # start checking at column = (1 + value of column in previous row)
             column = 1 + prev_column
 print("*********FC***********")
-forwardChecking(columns)
+#forwardChecking(columns)
