@@ -68,6 +68,88 @@ def game_is_won(board, chip):
         if "".join(list(map(str, winning_Sequence))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
             return True
 
+def three_in_a_row(board, chip):
+    """check if current board contain a sequence of 4-in-a-row of in the board
+     for the player that play with "chip"  """
+    count = 0
+    winning_sequence_one = np.array([EMPTY, chip, chip, chip])
+    winning_sequence_two = np.array([chip, chip, chip, EMPTY])
+
+    # Check horizontal sequences
+    for r in range(ROW_COUNT):
+        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board[r, :]))):
+            count+=1
+     # Check horizontal sequences
+    for r in range(ROW_COUNT):
+        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board[r, :]))):
+            count+=1
+    # Check vertical sequences
+    for c in range(COLUMN_COUNT):
+        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board[:, c]))):
+            count+=1
+     # Check vertical sequences
+    for c in range(COLUMN_COUNT):
+        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board[:, c]))):
+            count+=1
+    # Check positively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board.diagonal(offset)))):
+            count+=1
+    # Check positively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board.diagonal(offset)))):
+            count+=1
+    # Check negatively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+            count+=1
+     # Check negatively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+            count+=1
+    return count
+
+def two_in_a_row(board, chip):
+    """check if current board contain a sequence of 4-in-a-row of in the board
+     for the player that play with "chip"  """
+    count = 0
+    winning_sequence_one = np.array([EMPTY, chip, chip])
+    winning_sequence_two = np.array([chip, chip, EMPTY])
+
+    # Check horizontal sequences
+    for r in range(ROW_COUNT):
+        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board[r, :]))):
+            count+=1
+     # Check horizontal sequences
+    for r in range(ROW_COUNT):
+        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board[r, :]))):
+            count+=1
+    # Check vertical sequences
+    for c in range(COLUMN_COUNT):
+        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board[:, c]))):
+            count+=1
+     # Check vertical sequences
+    for c in range(COLUMN_COUNT):
+        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board[:, c]))):
+            count+=1
+    # Check positively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board.diagonal(offset)))):
+            count+=1
+    # Check positively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board.diagonal(offset)))):
+            count+=1
+    # Check negatively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+            count+=1
+     # Check negatively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+            count+=1
+    return count
+
 def get_valid_locations(board):
     valid_locations = []
     for col in range(COLUMN_COUNT):
@@ -81,58 +163,40 @@ def MoveRandom(board, color):
     row = get_next_open_row(board, column)
     drop_chip(board, row, column, color)
 
-# # # # # # # # # # # # # # main execution of the game # # # # # # # # # # # # # #
-turn = 0
-
+##########################
 board = create_board()
 print_board(board)
-game_over = False
+drop_chip(board,0,3,RED_INT)
+drop_chip(board,2,1,RED_INT)
+drop_chip(board,1,2,RED_INT)
+drop_chip(board,3,0,BLUE_INT)
+print(three_in_a_row(board,RED_INT))
 
-while not game_over:
-    if turn % 2 == 0:
-        col = int(input("RED please choose a column(1-7): "))
-        while col > 7 or col < 1:
-            col = int(input("Invalid column, pick a valid one: "))
-        while not is_valid_location(board, col - 1):
-            col = int(input("Column is full. pick another one..."))
-        col -= 1
-
-        row = get_next_open_row(board, col)
-        drop_chip(board, row, col, RED_INT)
-
-    if turn % 2 == 1 and not game_over:
-        MoveRandom(board,BLUE_INT)
-
-    print_board(board)
-    
-    if game_is_won(board, RED_INT):
-        game_over = True
-        print(colored("Red wins!", 'red'))
-    if game_is_won(board, BLUE_INT):
-        game_over = True
-        print(colored("Blue wins!", 'blue'))
-    if len(get_valid_locations(board)) == 0:
-        game_over = True
-        print(colored("Draw!", 'blue'))
-    turn += 1
 class Game:
-    def isFinished(s):
+    def isFinished(self, s):
         return game_is_won(s,RED_INT) #Not sure about whether this should be hard coded as red
-    def value(s):
+    def value(self, s):
+        val = 0
         #additive, blocks, wins
         if(game_is_won(s,RED_INT)):
-            return 1000000
-        if(should_block(s)):
-            return 1000000-1
-        #Additive in-a-rows TODO
-        return 0
+            return 10000000
+        if(game_is_won(s,BLUE_INT)):
+            return -10000001
+        # +1 for each 2 pieces in a row by Player 1, -1 for each 2 pieces in a row by Player 2.
+        val += two_in_a_row(s,RED_INT)
+        val -= two_in_a_row(s,BLUE_INT)
+        # +10 for each 3 pieces in a row by Player 1, -10 for each 3 pieces in a row by Player 2.
+        val += three_in_a_row(s,RED_INT)*10
+        val -= three_in_a_row(s,BLUE_INT)*50
+        return val
     def getNext(self,s):
         nextBoards = []
-        for i in len(s):
+        for i in range(len(s)):
             if(is_valid_location(s,i)):
                 curBoard = copy.deepcopy(s)
                 row = get_next_open_row(s,i)
                 drop_chip(curBoard,row,i,RED_INT)
+                nextBoards.append(curBoard)
         return nextBoards
 game = Game()
 class AB:
@@ -148,7 +212,7 @@ class AB:
         ns=game.getNext(s)
         bestMove=0
         for i in ns:
-            tmp=self.abmin (self,copy.deepcopy (i) , d-1,a, b)
+            tmp=self.abmin (copy.deepcopy (i) , d-1,a, b)
             if tmp[0]>v:
                 v=tmp[0]
                 bestMove=i
@@ -165,8 +229,8 @@ class AB:
         ns=game.getNext(s)
         bestMove=0
         for i in ns:
-            tmp=self.abmax(self, copy.deepcopy (i) , d-1,a, b)
-            if tmp[0]>v:
+            tmp=self.abmax(copy.deepcopy (i) , d-1,a, b)
+            if tmp[0]<v:
                 v=tmp[0]
                 bestMove=i
             if v<=a:
@@ -176,3 +240,40 @@ class AB:
         return [v,bestMove]
 
 #tmp = copy.deepcopy(board)
+# # # # # # # # # # # # # # main execution of the game # # # # # # # # # # # # # #
+turn = 0
+
+board = create_board()
+print_board(board)
+game_over = False
+abPruning = AB()
+while not game_over:
+    if turn % 2 == 0:
+        '''
+        col = int(input("RED please choose a column(1-7): "))
+        while col > 7 or col < 1:
+            col = int(input("Invalid column, pick a valid one: "))
+        while not is_valid_location(board, col - 1):
+            col = int(input("Column is full. pick another one..."))
+        col -= 1
+
+        row = get_next_open_row(board, col)
+        drop_chip(board, row, col, RED_INT)
+        '''
+        board = copy.deepcopy(abPruning.abmax(board, 2, float("-inf"), float("inf")))[1]
+
+    if turn % 2 == 1 and not game_over:
+        MoveRandom(board,BLUE_INT)
+
+    print_board(board)
+    
+    if game_is_won(board, RED_INT):
+        game_over = True
+        print(colored("Red wins!", 'red'))
+    if game_is_won(board, BLUE_INT):
+        game_over = True
+        print(colored("Blue wins!", 'blue'))
+    if len(get_valid_locations(board)) == 0:
+        game_over = True
+        print(colored("Draw!", 'blue'))
+    turn += 1
