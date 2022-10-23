@@ -1,4 +1,5 @@
 import copy
+from msilib import sequence
 import numpy as np
 import random
 from termcolor import colored  # can be taken out if you don't like it...
@@ -72,40 +73,75 @@ def three_in_a_row(board, chip):
     """check if current board contain a sequence of 4-in-a-row of in the board
      for the player that play with "chip"  """
     count = 0
-    winning_sequence_one = np.array([EMPTY, chip, chip, chip])
-    winning_sequence_two = np.array([chip, chip, chip, EMPTY])
+    sequence_1 = np.array([EMPTY, chip, chip, chip])
+    sequence_2 = np.array([chip, EMPTY, chip, chip])
+    sequence_3 = np.array([chip, chip, EMPTY, chip])
+    sequence_4 = np.array([chip, chip, chip, EMPTY])
+
 
     # Check horizontal sequences
     for r in range(ROW_COUNT):
-        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board[r, :]))):
+        if "".join(list(map(str, sequence_1))) in "".join(list(map(str, board[r, :]))):
             count+=1
      # Check horizontal sequences
     for r in range(ROW_COUNT):
-        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board[r, :]))):
+        if "".join(list(map(str, sequence_2))) in "".join(list(map(str, board[r, :]))):
+            count+=1
+     # Check horizontal sequences
+    for r in range(ROW_COUNT):
+        if "".join(list(map(str, sequence_3))) in "".join(list(map(str, board[r, :]))):
+            count+=1
+     # Check horizontal sequences
+    for r in range(ROW_COUNT):
+        if "".join(list(map(str, sequence_4))) in "".join(list(map(str, board[r, :]))):
             count+=1
     # Check vertical sequences
     for c in range(COLUMN_COUNT):
-        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board[:, c]))):
+        if "".join(list(map(str, sequence_1))) in "".join(list(map(str, board[:, c]))):
             count+=1
      # Check vertical sequences
     for c in range(COLUMN_COUNT):
-        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board[:, c]))):
+        if "".join(list(map(str, sequence_2))) in "".join(list(map(str, board[:, c]))):
+            count+=1
+     # Check vertical sequences
+    for c in range(COLUMN_COUNT):
+        if "".join(list(map(str, sequence_3))) in "".join(list(map(str, board[:, c]))):
+            count+=1
+     # Check vertical sequences
+    for c in range(COLUMN_COUNT):
+        if "".join(list(map(str, sequence_4))) in "".join(list(map(str, board[:, c]))):
             count+=1
     # Check positively sloped diagonals
     for offset in range(-2, 4):
-        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board.diagonal(offset)))):
+        if "".join(list(map(str, sequence_1))) in "".join(list(map(str, board.diagonal(offset)))):
             count+=1
     # Check positively sloped diagonals
     for offset in range(-2, 4):
-        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board.diagonal(offset)))):
+        if "".join(list(map(str, sequence_2))) in "".join(list(map(str, board.diagonal(offset)))):
+            count+=1
+     # Check positively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_3))) in "".join(list(map(str, board.diagonal(offset)))):
+            count+=1
+    # Check positively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_4))) in "".join(list(map(str, board.diagonal(offset)))):
             count+=1
     # Check negatively sloped diagonals
     for offset in range(-2, 4):
-        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+        if "".join(list(map(str, sequence_1))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
             count+=1
      # Check negatively sloped diagonals
     for offset in range(-2, 4):
-        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+        if "".join(list(map(str, sequence_2))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+            count+=1
+    # Check negatively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_3))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+            count+=1
+     # Check negatively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_4))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
             count+=1
     return count
 
@@ -113,40 +149,110 @@ def two_in_a_row(board, chip):
     """check if current board contain a sequence of 4-in-a-row of in the board
      for the player that play with "chip"  """
     count = 0
-    winning_sequence_one = np.array([EMPTY, chip, chip])
-    winning_sequence_two = np.array([chip, chip, EMPTY])
+    sequence_1 = np.array([EMPTY, EMPTY, chip, chip])
+    sequence_2 = np.array([EMPTY, chip, EMPTY, chip])
+    sequence_3 = np.array([EMPTY, chip, chip,EMPTY])
+    sequence_4 = np.array([chip, EMPTY,EMPTY,chip])
+    sequence_5 = np.array([chip,EMPTY, chip, EMPTY])
+    sequence_6 = np.array([chip, chip, EMPTY, EMPTY])
+
+
 
     # Check horizontal sequences
     for r in range(ROW_COUNT):
-        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board[r, :]))):
+        if "".join(list(map(str, sequence_1))) in "".join(list(map(str, board[r, :]))):
             count+=1
      # Check horizontal sequences
     for r in range(ROW_COUNT):
-        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board[r, :]))):
+        if "".join(list(map(str, sequence_2))) in "".join(list(map(str, board[r, :]))):
+            count+=1
+    # Check horizontal sequences
+    for r in range(ROW_COUNT):
+        if "".join(list(map(str, sequence_3))) in "".join(list(map(str, board[r, :]))):
+            count+=1
+     # Check horizontal sequences
+    for r in range(ROW_COUNT):
+        if "".join(list(map(str, sequence_4))) in "".join(list(map(str, board[r, :]))):
+            count+=1
+    # Check horizontal sequences
+    for r in range(ROW_COUNT):
+        if "".join(list(map(str, sequence_5))) in "".join(list(map(str, board[r, :]))):
+            count+=1
+     # Check horizontal sequences
+    for r in range(ROW_COUNT):
+        if "".join(list(map(str, sequence_6))) in "".join(list(map(str, board[r, :]))):
             count+=1
     # Check vertical sequences
     for c in range(COLUMN_COUNT):
-        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board[:, c]))):
+        if "".join(list(map(str, sequence_1))) in "".join(list(map(str, board[:, c]))):
             count+=1
      # Check vertical sequences
     for c in range(COLUMN_COUNT):
-        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board[:, c]))):
+        if "".join(list(map(str, sequence_2))) in "".join(list(map(str, board[:, c]))):
+            count+=1
+    # Check vertical sequences
+    for c in range(COLUMN_COUNT):
+        if "".join(list(map(str, sequence_3))) in "".join(list(map(str, board[:, c]))):
+            count+=1
+     # Check vertical sequences
+    for c in range(COLUMN_COUNT):
+        if "".join(list(map(str, sequence_4))) in "".join(list(map(str, board[:, c]))):
+            count+=1
+    # Check vertical sequences
+    for c in range(COLUMN_COUNT):
+        if "".join(list(map(str, sequence_5))) in "".join(list(map(str, board[:, c]))):
+            count+=1
+     # Check vertical sequences
+    for c in range(COLUMN_COUNT):
+        if "".join(list(map(str, sequence_6))) in "".join(list(map(str, board[:, c]))):
             count+=1
     # Check positively sloped diagonals
     for offset in range(-2, 4):
-        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, board.diagonal(offset)))):
+        if "".join(list(map(str, sequence_1))) in "".join(list(map(str, board.diagonal(offset)))):
             count+=1
     # Check positively sloped diagonals
     for offset in range(-2, 4):
-        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, board.diagonal(offset)))):
+        if "".join(list(map(str, sequence_2))) in "".join(list(map(str, board.diagonal(offset)))):
+            count+=1
+    # Check positively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_3))) in "".join(list(map(str, board.diagonal(offset)))):
+            count+=1
+    # Check positively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_4))) in "".join(list(map(str, board.diagonal(offset)))):
+            count+=1
+    # Check positively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_5))) in "".join(list(map(str, board.diagonal(offset)))):
+            count+=1
+    # Check positively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_6))) in "".join(list(map(str, board.diagonal(offset)))):
             count+=1
     # Check negatively sloped diagonals
     for offset in range(-2, 4):
-        if "".join(list(map(str, winning_sequence_one))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+        if "".join(list(map(str, sequence_1))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
             count+=1
      # Check negatively sloped diagonals
     for offset in range(-2, 4):
-        if "".join(list(map(str, winning_sequence_two))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+        if "".join(list(map(str, sequence_2))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+            count+=1
+    # Check negatively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_3))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+            count+=1
+     # Check negatively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_4))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+            count+=1
+     # Check negatively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_5))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
+            count+=1
+     # Check negatively sloped diagonals
+    for offset in range(-2, 4):
+        if "".join(list(map(str, sequence_6))) in "".join(list(map(str, np.flip(board, 1).diagonal(offset)))):
             count+=1
     return count
 
@@ -263,7 +369,16 @@ while not game_over:
         board = copy.deepcopy(abPruning.abmax(board, 2, float("-inf"), float("inf")))[1]
 
     if turn % 2 == 1 and not game_over:
-        MoveRandom(board,BLUE_INT)
+        #MoveRandom(board,BLUE_INT)
+        col = int(input("BLUE please choose a column(1-7): "))
+        while col > 7 or col < 1:
+            col = int(input("Invalid column, pick a valid one: "))
+        while not is_valid_location(board, col - 1):
+            col = int(input("Column is full. pick another one..."))
+        col -= 1
+
+        row = get_next_open_row(board, col)
+        drop_chip(board, row, col, BLUE_INT)
 
     print_board(board)
     
