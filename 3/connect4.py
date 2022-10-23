@@ -270,13 +270,13 @@ def MoveRandom(board, color):
     drop_chip(board, row, column, color)
 
 ##########################
-board = create_board()
+'''board = create_board()
 print_board(board)
 drop_chip(board,0,3,RED_INT)
 drop_chip(board,2,1,RED_INT)
 drop_chip(board,1,2,RED_INT)
 drop_chip(board,3,0,BLUE_INT)
-print(three_in_a_row(board,RED_INT))
+print(three_in_a_row(board,RED_INT))'''
 
 class Game:
     def isFinished(self, s):
@@ -293,15 +293,15 @@ class Game:
         val -= two_in_a_row(s,BLUE_INT)
         # +10 for each 3 pieces in a row by Player 1, -10 for each 3 pieces in a row by Player 2.
         val += three_in_a_row(s,RED_INT)*10
-        val -= three_in_a_row(s,BLUE_INT)*50
+        val -= three_in_a_row(s,BLUE_INT)*500
         return val
-    def getNext(self,s):
+    def getNext(self,s,chip):
         nextBoards = []
-        for i in range(len(s)):
+        for i in range(COLUMN_COUNT):
             if(is_valid_location(s,i)):
                 curBoard = copy.deepcopy(s)
                 row = get_next_open_row(s,i)
-                drop_chip(curBoard,row,i,RED_INT)
+                drop_chip(curBoard,row,i,chip)
                 nextBoards.append(curBoard)
         return nextBoards
 game = Game()
@@ -315,7 +315,7 @@ class AB:
         if d==0 or game.isFinished(s) :
             return [game.value(s), 0]
         v=float("-inf")
-        ns=game.getNext(s)
+        ns=game.getNext(s,RED_INT)
         bestMove=0
         for i in ns:
             tmp=self.abmin (copy.deepcopy (i) , d-1,a, b)
@@ -332,7 +332,7 @@ class AB:
         if d==0 or game.isFinished(s) :
             return [game.value(s),0]
         v=float("inf")
-        ns=game.getNext(s)
+        ns=game.getNext(s,BLUE_INT)
         bestMove=0
         for i in ns:
             tmp=self.abmax(copy.deepcopy (i) , d-1,a, b)
