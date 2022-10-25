@@ -28,11 +28,11 @@ Hill Climbing:
 
 Forward Checking (deterministic):
     Average Iteartions: 982
-    Average Moves:      219
+    Average Moves:      324
     Max Iterations:     982 
-    Max Moves:          219
+    Max Moves:          324
     Min Iterations:     982        
-    Min Moves:          219
+    Min Moves:          324
 
 """
 from cmath import inf
@@ -318,7 +318,7 @@ print(str(HC_Min_Iterations) + "," + str(HC_Min_Moves))
 ######################################Forward Checking############################################3
 def next_row_is_safe_FC(column, temp):
     row = len(columns) 
-    # check column
+    # check column for invalid move
     if temp[row][column] != 0:
         return False
     for queen_column in columns:
@@ -330,11 +330,13 @@ def place_in_next_row_FC(column,row,temp,columns):
     columns.append(column)
     size = len(columns)
     #Mark off the invalid spots after this placements
+    #Mark off columns
     for i in range(len(temp)):
         if(temp[i][column] == 0):
             temp[i][column] = size
     r = row
     c = column
+    #Mark off diagonals
     while True:
         if(r > len(temp) - 1 or c > len(temp) - 1):
             break
@@ -373,11 +375,13 @@ def place_in_next_row_FC(column,row,temp,columns):
 def remove_in_current_row_FC(column,row,temp,columns):
     #Revalidate the marked spots after removal of a queen
     if len(columns) > 0:
+        #Revalidate columns
         for i in range(len(temp)):
             if(temp[i][column] == len(columns)):
                 temp[i][column] = 0
         r = row
         c = column
+        #Revalidate diagonals
         while True:
             if(r > len(temp) - 1 or c > len(temp) - 1):
                 break
@@ -451,6 +455,7 @@ def forwardChecking(columns):
                 return number_of_iterations, number_of_moves
             # I couldn't find a solution so I now backtrack
             prev_column = remove_in_current_row_FC(columns[row - 1],row - 1,temp,columns)
+            number_of_moves+=1
             if (prev_column == -1): #I backtracked past column 1
                 print("There are no solutions")
                 #print(number_of_moves)
