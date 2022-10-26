@@ -106,11 +106,9 @@ def solve_queen(size):
             number_of_moves +=1
             # if board is full, we have a solution
             if row == size:
-                '''
-                print("I did it! Here is my solution")
+                #print("I did it! Here is my solution")
                 display()
                 print(str(number_of_iterations) + ", " + str(number_of_moves))
-                '''
                 return number_of_iterations, number_of_moves
             # I couldn't find a solution so I now backtrack
             prev_column = remove_in_current_row()
@@ -207,6 +205,10 @@ print(str(BM_Iterations/n) + "," + str(BM_Moves/n))
 print(str(BM_Max_Iterations) + "," + str(BM_Max_Moves))
 print(str(BM_Min_Iterations) + "," + str(BM_Min_Moves))
 '''
+num_i, num_m = britishMuseum(columns)
+displayBoard(columns)
+print(str(num_i) + "," + str(num_m))
+
 #####################################################################################################
 def countAttacks(columns):
     # check column
@@ -227,7 +229,7 @@ def countAttacks(columns):
                 c+=1
         row+=1
     return c/2
-##############Hill Climbing###########
+################################Hill Climbing#################################
 #checks if arrays are equal
 def arEqual(ar1,ar2):
     for i in range(len(ar1)):
@@ -276,7 +278,7 @@ def hillClimbing(columns):
                     h = countAttacks(copyOfColumns)
                     if(h == 0):                     #Solution found
                         columns = copyOfColumns
-                        #displayBoard(copyOfColumns)
+                        displayBoard(copyOfColumns)
                         return iterations,moves
                     if(h <= min):
                         min = h
@@ -315,6 +317,10 @@ print(str(HC_Iterations/n) + "," + str(HC_Moves/n))
 print(str(HC_Max_Iterations) + "," + str(HC_Max_Moves))
 print(str(HC_Min_Iterations) + "," + str(HC_Min_Moves))
 '''
+num_i, num_m = hillClimbing(columns)
+print(str(num_i) + "," + str(num_m))
+
+
 ######################################Forward Checking############################################3
 def next_row_is_safe_FC(column, temp):
     row = len(columns) 
@@ -434,6 +440,9 @@ def forwardChecking(columns):
     # iterate over rows of board
     while True:
         while column < size:
+            if(temp[row][column] != 0):
+                column+=1
+                continue
             number_of_iterations+=1
             if next_row_is_safe_FC(column,temp):
                 number_of_moves += 1
@@ -449,7 +458,7 @@ def forwardChecking(columns):
             number_of_moves +=1
             # if board is full, we have a solution
             if row == size:
-                print("I did it! Here is my solution")
+                #print("I did it! Here is my solution")
                 displayBoard(columns)
                 print(str(number_of_iterations) + ", " + str(number_of_moves))
                 return number_of_iterations, number_of_moves
@@ -464,5 +473,5 @@ def forwardChecking(columns):
             row -= 1
             # start checking at column = (1 + value of column in previous row)
             column = 1 + prev_column
-print("*********FC***********")
-#forwardChecking(columns)
+print("*********Forward Checking***********")
+num_i, num_m = forwardChecking(columns)
