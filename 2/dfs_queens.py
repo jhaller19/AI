@@ -440,6 +440,7 @@ def forwardChecking(columns):
     # iterate over rows of board
     while True:
         while column < size:
+            #If the row+column has been marked off as invalid already, skip to next iteration
             if(temp[row][column] != 0):
                 column+=1
                 continue
