@@ -288,7 +288,7 @@ def hillClimbing(columns):
         if(prevH == min or curIterations >= maxIterations):
             rePlaceQueens(columns,size)
             curIterations = 0
-            moves += len(columns)
+            moves += len(columns) #increment moves by size of columns for restart
             prevH = countAttacks(columns)
             min = prevH
             continue
