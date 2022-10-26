@@ -27,12 +27,12 @@ Hill Climbing:
     Min Moves:          9
 
 Forward Checking (deterministic):
-    Average Iteartions: 982
-    Average Moves:      324
-    Max Iterations:     982 
-    Max Moves:          324
-    Min Iterations:     982        
-    Min Moves:          324
+    Average Iteartions: 219
+    Average Moves:      219
+    Max Iterations:     219 
+    Max Moves:          219
+    Min Iterations:     219        
+    Min Moves:          219
 
 """
 from cmath import inf
@@ -464,7 +464,6 @@ def forwardChecking(columns):
                 return number_of_iterations, number_of_moves
             # I couldn't find a solution so I now backtrack
             prev_column = remove_in_current_row_FC(columns[row - 1],row - 1,temp,columns)
-            number_of_moves+=1
             if (prev_column == -1): #I backtracked past column 1
                 print("There are no solutions")
                 #print(number_of_moves)
