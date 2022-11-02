@@ -280,20 +280,20 @@ print(three_in_a_row(board,RED_INT))'''
 
 class Game:
     def isFinished(self, s):
-        return game_is_won(s,RED_INT) #Not sure about whether this should be hard coded as red
+        return game_is_won(s,RED_INT) or game_is_won(s,BLUE_INT)#Not sure about whether this should be hard coded as red
     def value(self, s):
         val = 0
         #additive, blocks, wins
-        if(game_is_won(s,RED_INT)):
-            return 10000000
         if(game_is_won(s,BLUE_INT)):
+            return 10000000
+        if(game_is_won(s,RED_INT)):
             return -10000001
         # +1 for each 2 pieces in a row by Player 1, -1 for each 2 pieces in a row by Player 2.
-        val += two_in_a_row(s,RED_INT)
-        val -= two_in_a_row(s,BLUE_INT)
+        val += two_in_a_row(s,BLUE_INT)
+        val -= two_in_a_row(s,RED_INT)
         # +10 for each 3 pieces in a row by Player 1, -10 for each 3 pieces in a row by Player 2.
-        val += three_in_a_row(s,RED_INT)*10
-        val -= three_in_a_row(s,BLUE_INT)*500
+        val += three_in_a_row(s,BLUE_INT)*10
+        val -= three_in_a_row(s,RED_INT)*500
         return val
     def getNext(self,s,chip):
         nextBoards = []
@@ -311,11 +311,11 @@ class AB:
     #a, b= alpha and beta
     #returns [v, ns]: v= state s's value. ns = the state after recomennded move
     #if s is a terminal state ns=0.
-    def abmax (self,s, d, a, b) :                   #Call this first abmax(AB obj, origin, depth, −∞, +∞)
+    def abmax (self,s, d, a, b) :
         if d==0 or game.isFinished(s) :
             return [game.value(s), 0]
         v=float("-inf")
-        ns=game.getNext(s,RED_INT)
+        ns=game.getNext(s,BLUE_INT)
         bestMove=0
         for i in ns:
             tmp=self.abmin (copy.deepcopy (i) , d-1,a, b)
@@ -332,7 +332,7 @@ class AB:
         if d==0 or game.isFinished(s) :
             return [game.value(s),0]
         v=float("inf")
-        ns=game.getNext(s,BLUE_INT)
+        ns=game.getNext(s,RED_INT)
         bestMove=0
         for i in ns:
             tmp=self.abmax(copy.deepcopy (i) , d-1,a, b)
@@ -355,7 +355,7 @@ game_over = False
 abPruning = AB()
 while not game_over:
     if turn % 2 == 0:
-        '''
+        
         col = int(input("RED please choose a column(1-7): "))
         while col > 7 or col < 1:
             col = int(input("Invalid column, pick a valid one: "))
@@ -365,20 +365,11 @@ while not game_over:
 
         row = get_next_open_row(board, col)
         drop_chip(board, row, col, RED_INT)
-        '''
-        board = copy.deepcopy(abPruning.abmax(board, 2, float("-inf"), float("inf")))[1]
-
+        
     if turn % 2 == 1 and not game_over:
         #MoveRandom(board,BLUE_INT)
-        col = int(input("BLUE please choose a column(1-7): "))
-        while col > 7 or col < 1:
-            col = int(input("Invalid column, pick a valid one: "))
-        while not is_valid_location(board, col - 1):
-            col = int(input("Column is full. pick another one..."))
-        col -= 1
-
-        row = get_next_open_row(board, col)
-        drop_chip(board, row, col, BLUE_INT)
+        ##Make this return col of move and dropchip()
+        board = copy.deepcopy(abPruning.abmax(board, 3, float("-inf"), float("inf")))[1]
 
     print_board(board)
     
