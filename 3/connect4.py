@@ -281,19 +281,24 @@ print(three_in_a_row(board,RED_INT))'''
 class Game:
     def isFinished(self, s):
         return game_is_won(s,RED_INT) or game_is_won(s,BLUE_INT)#Not sure about whether this should be hard coded as red
-    def value(self, s):
+    def value(self, s,color):
+        otherColor = -2
+        if color == RED_INT:
+            otherColor = BLUE_INT
+        else:
+            otherColor = RED_INT
         val = 0
         #additive, blocks, wins
-        if(game_is_won(s,BLUE_INT)):
+        if(game_is_won(s,color)):
             return 10000000
-        if(game_is_won(s,RED_INT)):
+        if(game_is_won(s,otherColor)):
             return -10000001
         # +1 for each 2 pieces in a row by Player 1, -1 for each 2 pieces in a row by Player 2.
-        val += two_in_a_row(s,BLUE_INT)
-        val -= two_in_a_row(s,RED_INT)
+        val += two_in_a_row(s,color)
+        val -= two_in_a_row(s,otherColor)
         # +10 for each 3 pieces in a row by Player 1, -10 for each 3 pieces in a row by Player 2.
-        val += three_in_a_row(s,BLUE_INT)*10
-        val -= three_in_a_row(s,RED_INT)*500
+        val += three_in_a_row(s,color)*10
+        val -= three_in_a_row(s,otherColor)*500
         return val
     def getNext(self,s,chip):
         nextBoards = []
@@ -311,14 +316,19 @@ class AB:
     #a, b= alpha and beta
     #returns [v, ns]: v= state s's value. ns = the state after recomennded move
     #if s is a terminal state ns=0.
-    def abmax (self,s, d, a, b) :
+    def abmax (self,s, d, a, b,color) :
+        otherColor = -2
+        if color == RED_INT:
+            otherColor = BLUE_INT
+        else:
+            otherColor = RED_INT
         if d==0 or game.isFinished(s) :
-            return [game.value(s), 0]
+            return [game.value(s,color), 0]
         v=float("-inf")
-        ns=game.getNext(s,BLUE_INT)
+        ns=game.getNext(s,color)
         bestMove=0
         for i in ns:
-            tmp=self.abmin (copy.deepcopy (i) , d-1,a, b)
+            tmp=self.abmin (copy.deepcopy (i) , d-1,a, b,color)
             if tmp[0]>v:
                 v=tmp[0]
                 bestMove=i
@@ -328,14 +338,19 @@ class AB:
                 a=v
         return [v,bestMove]
 
-    def abmin (self, s, d, a, b) :
+    def abmin (self, s, d, a, b,color) :
+        otherColor = -2
+        if color == RED_INT:
+            otherColor = BLUE_INT
+        else:
+            otherColor = RED_INT
         if d==0 or game.isFinished(s) :
-            return [game.value(s),0]
+            return [game.value(s,color),0]
         v=float("inf")
-        ns=game.getNext(s,RED_INT)
+        ns=game.getNext(s,otherColor)
         bestMove=0
         for i in ns:
-            tmp=self.abmax(copy.deepcopy (i) , d-1,a, b)
+            tmp=self.abmax(copy.deepcopy (i) , d-1,a, b,color)
             if tmp[0]<v:
                 v=tmp[0]
                 bestMove=i
@@ -353,6 +368,13 @@ board = create_board()
 print_board(board)
 game_over = False
 abPruning = AB()
+def agent1(board,color):
+    nextBoard = abPruning.abmax(board, 2, float("-inf"), float("inf"),BLUE_INT)[1]
+    for i in range(ROW_COUNT):
+        for j in range(COLUMN_COUNT):
+            if nextBoard[i][j] != board[i][j]:
+                return j
+    return -1
 while not game_over:
     if turn % 2 == 0:
         
@@ -369,7 +391,10 @@ while not game_over:
     if turn % 2 == 1 and not game_over:
         #MoveRandom(board,BLUE_INT)
         ##Make this return col of move and dropchip()
-        board = copy.deepcopy(abPruning.abmax(board, 3, float("-inf"), float("inf")))[1]
+        nextCol = agent1(board,BLUE_INT)
+        nextRow = get_next_open_row(board,nextCol)
+        drop_chip(board,nextRow,nextCol,BLUE_INT)
+        #board = copy.deepcopy(abPruning.abmax(board, 1, float("-inf"), float("inf"),BLUE_INT))[1]
 
     print_board(board)
     
