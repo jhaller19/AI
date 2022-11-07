@@ -48,8 +48,8 @@ def print_board(board):
           .replace("1", RED_CHAR).replace("2", BLUE_CHAR).replace("\n", "|\n") + "|")
 
 def game_is_won(board, chip):
-    """check if current board contain a sequence of 4-in-a-row of in the board
-     for the player that play with "chip"  """
+    '''Check for 4 in a row'''
+
 
     winning_Sequence = np.array([chip, chip, chip, chip])
     # Check horizontal sequences
@@ -70,14 +70,12 @@ def game_is_won(board, chip):
             return True
 
 def three_in_a_row(board, chip):
-    """check if current board contain a sequence of 4-in-a-row of in the board
-     for the player that play with "chip"  """
+    '''Count 3-in-a-rows'''
     count = 0
     sequence_1 = np.array([EMPTY, chip, chip, chip])
     sequence_2 = np.array([chip, EMPTY, chip, chip])
     sequence_3 = np.array([chip, chip, EMPTY, chip])
     sequence_4 = np.array([chip, chip, chip, EMPTY])
-
 
     # Check horizontal sequences
     for r in range(ROW_COUNT):
@@ -146,8 +144,7 @@ def three_in_a_row(board, chip):
     return count
 
 def two_in_a_row(board, chip):
-    """check if current board contain a sequence of 4-in-a-row of in the board
-     for the player that play with "chip"  """
+    '''Count 2-in-a-rows'''
     count = 0
     sequence_1 = np.array([EMPTY, EMPTY, chip, chip])
     sequence_2 = np.array([EMPTY, chip, EMPTY, chip])
@@ -155,8 +152,6 @@ def two_in_a_row(board, chip):
     sequence_4 = np.array([chip, EMPTY,EMPTY,chip])
     sequence_5 = np.array([chip,EMPTY, chip, EMPTY])
     sequence_6 = np.array([chip, chip, EMPTY, EMPTY])
-
-
 
     # Check horizontal sequences
     for r in range(ROW_COUNT):
@@ -281,6 +276,7 @@ print(three_in_a_row(board,RED_INT))'''
 class Game:
     def isFinished(self, s):
         return game_is_won(s,RED_INT) or game_is_won(s,BLUE_INT)#Not sure about whether this should be hard coded as red
+    #Get heuristic value
     def value(self, s,color):
         otherColor = -2
         if color == RED_INT:
@@ -296,10 +292,11 @@ class Game:
         # +1 for each 2 pieces in a row by Player 1, -1 for each 2 pieces in a row by Player 2.
         val += two_in_a_row(s,color)
         val -= two_in_a_row(s,otherColor)
-        # +10 for each 3 pieces in a row by Player 1, -10 for each 3 pieces in a row by Player 2.
+        # +10 for each 3 pieces in a row by Player 1, -500 for each 3 pieces in a row by Player 2.
         val += three_in_a_row(s,color)*10
         val -= three_in_a_row(s,otherColor)*500
         return val
+    #Get all possible "neighboring" moves
     def getNext(self,s,chip):
         nextBoards = []
         for i in range(COLUMN_COUNT):
@@ -369,7 +366,9 @@ print_board(board)
 game_over = False
 abPruning = AB()
 def agent1(board,color):
+    #Use AB Pruning + heiristics to get the state of the board after making the best move
     nextBoard = abPruning.abmax(board, 3, float("-inf"), float("inf"),BLUE_INT)[1]
+    #Return column which I just placed my chip in
     for i in range(ROW_COUNT):
         for j in range(COLUMN_COUNT):
             if nextBoard[i][j] != board[i][j]:
