@@ -369,7 +369,7 @@ print_board(board)
 game_over = False
 abPruning = AB()
 def agent1(board,color):
-    nextBoard = abPruning.abmax(board, 2, float("-inf"), float("inf"),BLUE_INT)[1]
+    nextBoard = abPruning.abmax(board, 3, float("-inf"), float("inf"),BLUE_INT)[1]
     for i in range(ROW_COUNT):
         for j in range(COLUMN_COUNT):
             if nextBoard[i][j] != board[i][j]:
