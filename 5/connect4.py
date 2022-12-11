@@ -83,18 +83,23 @@ def MoveRandom(board, color):
     drop_chip(board, row, column, color)
 
 def MC(board,chip):
-    winsPerCol = [0,0,0,0,0,0,0]
+    winsPerCol = [0,0,0,0,0,0,0]    #times the agent one when decding to place chip in column i
     for col in range(7):
         row = get_next_open_row(board,col)
+        #if the column is full, skip it
         if row == -1:
             winsPerCol[col] = -1
         else:
             for i in range(100):
+                #Copy the board and make a move in column col
                 nextBoard = copy.deepcopy(board)
                 drop_chip(nextBoard, row,col,chip)
+                #Play rest of game randomly
                 agentWon = playRestOfGame(nextBoard,chip)
+                #increment wins per col if agent won
                 if(agentWon):
                     winsPerCol[col]+=1
+    #Determine which column had the highest chance of winning
     colToReturn = -1
     maxWins = -1
     for col in range(7):
