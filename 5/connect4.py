@@ -181,4 +181,6 @@ while not game_over:
         print(colored("Draw!", 'blue'))
     turn += 1
 
+def agent1move(board,color):
+    return MC(board,color)
 #tmp = copy.deepcopy(board)
