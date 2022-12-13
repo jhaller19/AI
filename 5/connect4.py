@@ -132,7 +132,7 @@ def playRestOfGame(board,chip):
             
 
 # # # # # # # # # # # # # # main execution of the game # # # # # # # # # # # # # #
-turn = 0
+'''turn = 0
 
 board = create_board()
 print_board(board)
@@ -140,7 +140,6 @@ game_over = False
 
 while not game_over:
     if turn % 2 == 0:
-        '''
         col = int(input("RED please choose a column(1-7): "))
         while col > 7 or col < 1:
             col = int(input("Invalid column, pick a valid one: "))
@@ -151,7 +150,6 @@ while not game_over:
 
         row = get_next_open_row(board, col)
         drop_chip(board, row, col, RED_INT)
-        '''
         col = MC(board,RED_INT)
         row = get_next_open_row(board, col)
         drop_chip(board, row, col, RED_INT)
@@ -180,7 +178,7 @@ while not game_over:
         game_over = True
         print(colored("Draw!", 'blue'))
     turn += 1
-
-def agent1move(board,color):
+'''
+def MCagent(board,color):
     return MC(board,color)
 #tmp = copy.deepcopy(board)
