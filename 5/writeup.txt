@@ -1,0 +1,3 @@
+The algorithm works as follows:
+To choose a column to place our chip in, we place our chip in each of the 7 columns and simulate the rest of the game
+randomly 100 times. After the simulations are done, we choose the column where we won the most amount of times.
